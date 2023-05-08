@@ -16,10 +16,10 @@ impl Plugin for UiPlugin {
 #[allow(dead_code)]
 #[derive(Default, Resource)]
 pub struct OccupiedScreenSpace {
-    left: f32,
-    top: f32,
-    right: f32,
-    bottom: f32,
+    pub left: f32,
+    pub top: f32,
+    pub right: f32,
+    pub bottom: f32,
 }
 
 fn ui_system(mut contexts: EguiContexts, mut occupied_screen_space: ResMut<OccupiedScreenSpace>) {
@@ -30,12 +30,14 @@ fn ui_system(mut contexts: EguiContexts, mut occupied_screen_space: ResMut<Occup
     egui::TopBottomPanel::top("top_panel")
         .default_height(20.)
         .show(ctx, |ui| {
-            ui.menu_button("File", |ui| {
-                if ui.button("Quit").clicked() {
-                    // quit
-                    // ToDo! find a better way to exit
-                    std::process::exit(0);
-                }
+            egui::menu::bar(ui, |ui| {
+                ui.menu_button("File", |ui| {
+                    if ui.button("Quit").clicked() {
+                        // quit
+                        // ToDo! find a better way to exit
+                        std::process::exit(0);
+                    }
+                })
             })
         });
 
@@ -44,7 +46,16 @@ fn ui_system(mut contexts: EguiContexts, mut occupied_screen_space: ResMut<Occup
         .default_width(SIDE_PANEL_DEFAULT_WIDTH)
         .resizable(true)
         .show(ctx, |ui| {
-            ui.label("Left resizeable panel");
+            ui.label("Tools");
+
+            ui.small_button("Cube");
+
+            ui.small_button("Sphere");
+
+            ui.small_button("Plane");
+
+            ui.small_button("Light");
+
             ui.allocate_rect(ui.available_rect_before_wrap(), egui::Sense::hover());
         })
         .response

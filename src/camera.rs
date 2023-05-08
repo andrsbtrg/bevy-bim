@@ -9,10 +9,15 @@ pub struct CameraPlugin;
 
 impl Plugin for CameraPlugin {
     fn build(&self, app: &mut App) {
-        app.add_startup_system(spawn_camera)
+        app.insert_resource(ClearColor(Color::hex("AAAAAA").unwrap()))
+            .add_startup_system(spawn_camera)
             .add_system(pan_orbit_camera);
+        // .add_system(update_camera_transform_system)
     }
 }
+
+#[derive(Resource, Deref, DerefMut)]
+pub struct OriginalCameraTransform(Transform);
 
 #[derive(Component)]
 struct PanOrbitCamera {
@@ -135,9 +140,13 @@ fn spawn_camera(mut commands: Commands) {
     let translation = Vec3::new(-2.0, 2.5, 5.0);
     let radius = translation.length();
 
+    let camera_transform = Transform::from_translation(translation).looking_at(Vec3::ZERO, Vec3::Y);
+
+    commands.insert_resource(OriginalCameraTransform(camera_transform));
+
     commands.spawn((
         Camera3dBundle {
-            transform: Transform::from_translation(translation).looking_at(Vec3::ZERO, Vec3::Y),
+            transform: camera_transform,
             ..Default::default()
         },
         PanOrbitCamera {
@@ -147,3 +156,34 @@ fn spawn_camera(mut commands: Commands) {
         RaycastPickCamera::default(),
     ));
 }
+
+// fn update_camera_transform_system(
+//     occupied_screen_space: Res<OccupiedScreenSpace>,
+//     original_camera_transform: Res<OriginalCameraTransform>,
+//     windows: Query<&Window, With<PrimaryWindow>>,
+//     mut camera_query: Query<(&PanOrbitCamera, &Projection, &mut Transform)>,
+// ) {
+//     let (focus, camera_projection, mut transform) = match camera_query.get_single_mut() {
+//         Ok((pan_orbit_camera_entity, Projection::Perspective(projection), transform)) => {
+//             (pan_orbit_camera_entity.focus, projection, transform)
+//         }
+//         _ => unreachable!(),
+//     };
+//
+//     let distance_to_target = (focus - original_camera_transform.translation).length();
+//     let frustum_height = 2.0 * distance_to_target * (camera_projection.fov * 0.5).tan();
+//     let frustum_width = frustum_height * camera_projection.aspect_ratio;
+//
+//     let window = windows.single();
+//
+//     let left_taken = occupied_screen_space.left / window.width();
+//     let right_taken = occupied_screen_space.right / window.width();
+//     let top_taken = occupied_screen_space.top / window.height();
+//     let bottom_taken = occupied_screen_space.bottom / window.height();
+//     transform.translation = original_camera_transform.translation
+//         + transform.rotation.mul_vec3(Vec3::new(
+//             (right_taken - left_taken) * frustum_width * 0.5,
+//             (top_taken - bottom_taken) * frustum_height * 0.5,
+//             0.0,
+//         ));
+// }

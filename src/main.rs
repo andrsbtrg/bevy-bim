@@ -24,14 +24,15 @@ fn setup_scene(
     mut materials: ResMut<Assets<StandardMaterial>>,
 ) {
     // Ground plane
-    commands.spawn(PbrBundle {
-        mesh: meshes.add(Mesh::from(shape::Plane {
-            size: 50.0,
-            subdivisions: 0,
-        })),
-        material: materials.add(Color::rgb(0.3, 0.5, 0.3).into()),
-        ..Default::default()
-    });
+    // commands.spawn(PbrBundle {
+    //     mesh: meshes.add(Mesh::from(shape::Plane {
+    //         size: 50.0,
+    //         subdivisions: 0,
+    //     })),
+    //     material: materials.add(Color::rgb(0.3, 0.5, 0.3).into()),
+    //     transform: Transform::from_xyz(0., 0., 0.).with_scale(Vec3::splat(100.)),
+    //     ..Default::default()
+    // });
     // Cube
     // commands.spawn((
     //     PbrBundle {
@@ -43,14 +44,14 @@ fn setup_scene(
     //     PickableBundle::default(),
     //     RaycastPickTarget::default(),
     // ));
-    // Spawn squares
+    // Spawn cubes
     for x in -2..=2 {
         let z = 0.5 + x as f32 * 0.1;
         commands.spawn((
             MaterialMeshBundle {
                 mesh: meshes.add(Mesh::from(shape::Cube::default())),
-                transform: Transform::from_xyz(x as f32 * 200.0, 0.0, z)
-                    .with_scale(Vec3::splat(100.)),
+                transform: Transform::from_xyz(x as f32 * 200.0, 100.0, z)
+                    .with_scale(Vec3::splat(100.)), // splat is same as (100, 100, 100)
                 material: materials.add(Color::hsl(0.0, 1.0, z).into()),
                 ..Default::default()
             },
@@ -68,15 +69,15 @@ fn setup_scene(
         ));
     }
     // Light
-    commands.spawn(PointLightBundle {
-        point_light: PointLight {
-            intensity: 1500.0,
-            shadows_enabled: true,
-            ..Default::default()
-        },
-        transform: Transform::from_xyz(4.0, 8.0, 4.0),
-        ..Default::default()
-    });
+    // commands.spawn(PointLightBundle {
+    //     point_light: PointLight {
+    //         intensity: 1500.0,
+    //         shadows_enabled: true,
+    //         ..Default::default()
+    //     },
+    //     transform: Transform::from_xyz(4.0, 8.0, 4.0),
+    //     ..Default::default()
+    // });
 }
 
 #[derive(Component)]

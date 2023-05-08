@@ -1,5 +1,5 @@
-use bevy::{prelude::*, window::PrimaryWindow};
-use bevy_egui::{egui, EguiContexts, EguiPlugin, EguiSettings};
+use bevy::prelude::*;
+use bevy_egui::{egui, EguiContexts, EguiPlugin};
 
 pub const SIDE_PANEL_DEFAULT_WIDTH: f32 = 200.;
 
@@ -9,8 +9,7 @@ impl Plugin for UiPlugin {
     fn build(&self, app: &mut bevy::prelude::App) {
         app.add_plugin(EguiPlugin)
             .init_resource::<OccupiedScreenSpace>()
-            .add_system(ui_system)
-            .add_system(update_ui_scale_factor_system);
+            .add_system(ui_system);
     }
 }
 
@@ -51,24 +50,4 @@ fn ui_system(mut contexts: EguiContexts, mut occupied_screen_space: ResMut<Occup
         .response
         .rect
         .width();
-}
-
-fn update_ui_scale_factor_system(
-    keyboard_input: Res<Input<KeyCode>>,
-    mut toggle_scale_factor: Local<Option<bool>>,
-    mut egui_settings: ResMut<EguiSettings>,
-    windows: Query<&Window, With<PrimaryWindow>>,
-) {
-    if keyboard_input.just_pressed(KeyCode::Slash) || toggle_scale_factor.is_none() {
-        *toggle_scale_factor = Some(!toggle_scale_factor.unwrap_or(true));
-
-        if let Ok(window) = windows.get_single() {
-            let scale_factor = if toggle_scale_factor.unwrap() {
-                1.0
-            } else {
-                1.0 / window.scale_factor()
-            };
-            egui_settings.scale_factor = scale_factor;
-        }
-    }
 }

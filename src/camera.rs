@@ -3,6 +3,7 @@ use bevy::{
     prelude::*,
     window::PrimaryWindow,
 };
+use bevy_mod_picking::prelude::*;
 
 pub struct CameraPlugin;
 
@@ -143,5 +144,6 @@ fn spawn_camera(mut commands: Commands) {
             radius,
             ..Default::default()
         },
+        RaycastPickCamera::default(),
     ));
 }

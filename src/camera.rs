@@ -137,7 +137,7 @@ fn get_primary_window_size(window_query: &Query<&Window, With<PrimaryWindow>>) -
 }
 
 fn spawn_camera(mut commands: Commands) {
-    let translation = Vec3::new(-2.0, 2.5, 5.0);
+    let translation = Vec3::new(-2.0, 2.5, 5.0) * 100.;
     let radius = translation.length();
 
     let camera_transform = Transform::from_translation(translation).looking_at(Vec3::ZERO, Vec3::Y);

@@ -18,6 +18,9 @@ fn main() {
         .run();
 }
 
+#[derive(Component)]
+struct Wall;
+
 fn setup_scene(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
@@ -66,6 +69,7 @@ fn setup_scene(
                 commands.entity(event.dropped).insert(Spin(FRAC_PI_2)); // Spin dropped entity
                 commands.entity(event.target).insert(Spin(-FRAC_PI_2)); // Spin dropped-on entity
             }),
+            Wall {},
         ));
     }
     // Light

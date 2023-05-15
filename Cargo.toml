@@ -6,7 +6,8 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-bevy = { version = "0.10.1", features = ["dynamic_linking"] }
+bevy = { version = "0.10.1" }
+bevy-inspector-egui = "0.18.3"
 bevy_egui = "0.20.3"
 bevy_mod_picking = {version =  "0.13.0", features = ["backend_egui"] }
 rand = "0.8.5"
@@ -17,3 +18,5 @@ rand = "0.8.5"
 [build]
 rustflags = ["-C", "link-arg=-fuse-ld=lld"]
 
+[target.wasm32-unknown-unknown]
+runner = "wasm-server-runner"

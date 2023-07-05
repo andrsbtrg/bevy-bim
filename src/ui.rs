@@ -15,7 +15,7 @@ impl Plugin for UiPlugin {
             .init_resource::<OccupiedScreenSpace>()
             .add_plugin(DefaultInspectorConfigPlugin)
             .add_system(ui_system)
-            .add_system(world_inspector_ui_debug); // not working
+            .add_system(world_inspector_ui_debug);
     }
 }
 
@@ -65,20 +65,6 @@ fn ui_system(
             if ui.small_button("Sphere").clicked() {
                 println!("Pressed Sphere!");
             }
-
-            if ui.small_button("Plane").clicked() {
-                println!("Pressed Plane!");
-            }
-
-            if ui.small_button("Light").clicked() {
-                println!("Pressed Light!");
-            }
-
-            // ui.label("Walls");
-            // for (wall_i, _) in wall_queries.iter().enumerate() {
-            //     ui.selectable_label(false, format!("Wall {wall_i}"));
-            // }
-
             ui.allocate_rect(ui.available_rect_before_wrap(), egui::Sense::hover());
         })
         .response

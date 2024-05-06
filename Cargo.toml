@@ -6,12 +6,12 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-bevy = { version = "0.10.1" }
-bevy-inspector-egui = "0.18.3"
-bevy_egui = "0.20.3"
-bevy_mod_picking = {version =  "0.13.0", features = ["backend_egui"] }
+bevy = "0.13"
+bevy-inspector-egui = "0.24"
+bevy_egui = "0.27"
+bevy_mod_picking = { version = "0.18", features = ["backend_egui"] }
+bevy_panorbit_camera = "0.18.0"
 rand = "0.8.5"
-hedron = { git = "https://github.com/josfeenstra/hedron.git", features = ["bevy"] }
 
 # Enable a small amount of optimization in debug mode
 # [profile.dev]

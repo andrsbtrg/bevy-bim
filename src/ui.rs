@@ -1,6 +1,7 @@
 use bevy::{app::AppExit, prelude::*, window::PrimaryWindow};
 use bevy_egui::{egui, EguiContext, EguiContexts, EguiPlugin};
 use bevy_inspector_egui::DefaultInspectorConfigPlugin;
+use crate::style;
 
 // use crate::Wall;
 
@@ -11,11 +12,12 @@ pub struct UiPlugin;
 
 impl Plugin for UiPlugin {
     fn build(&self, app: &mut bevy::prelude::App) {
-        app.add_plugin(EguiPlugin)
+        app.add_plugins(EguiPlugin)
             .init_resource::<OccupiedScreenSpace>()
-            .add_plugin(DefaultInspectorConfigPlugin)
-            .add_system(ui_system)
-            .add_system(world_inspector_ui_debug);
+            .add_plugins(DefaultInspectorConfigPlugin)
+            .add_systems(Startup, setup_ui)
+            .add_systems(Update, ui_system)
+            .add_systems(Update, world_inspector_ui_debug);
     }
 }
 
@@ -26,6 +28,11 @@ pub struct OccupiedScreenSpace {
     pub top: f32,
     pub right: f32,
     pub bottom: f32,
+}
+
+fn setup_ui(mut contexts: EguiContexts) {
+    let ctx = contexts.ctx_mut();
+    style::set_style(ctx, style::Theme::dark())
 }
 
 fn ui_system(
@@ -44,7 +51,7 @@ fn ui_system(
                 ui.menu_button("File", |ui| {
                     if ui.button("Quit").clicked() {
                         // quit
-                        exit.send(AppExit)
+                        exit.send(AppExit);
                     }
                 })
             })
